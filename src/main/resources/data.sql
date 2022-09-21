@@ -24,4 +24,4 @@ VALUES ('Satin wrap dress', 'Satin wrap dress', 25, 60.15, 1, 1, 1, false, CURRE
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
 VALUES ('Patterned shirt dress', 'Patterned shirt dress', 12, 38.15, 1, 1, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
-VALUES ('Oversized shirt dress', 'Oversized shirt dress', 6, 34.15, 1, 2, 3, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
+VALUES ('Oversized shirt dress', 'Oversized shirt dress', 6, 34.15, 1, 2, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());

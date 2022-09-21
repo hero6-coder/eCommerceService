@@ -10,9 +10,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@MappedSuperclass
-@SuperBuilder
-@NoArgsConstructor
 @Data
 public class BaseEntity implements Serializable {
     private static final long serialVersionUID = -2715656593664737660L;
