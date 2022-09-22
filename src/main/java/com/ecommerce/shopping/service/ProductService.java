@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 
@@ -21,4 +22,6 @@ public interface ProductService {
     ProductDto updateProduct(@NotNull ProductDto productDTO, Long id);
 
     ProductDto delete(@NotNull Long id);
+
+    void persistToDb(Map<Long, ProductDto> userCart);
 }

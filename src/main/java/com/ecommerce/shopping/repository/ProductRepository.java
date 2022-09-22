@@ -11,4 +11,6 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends PagingAndSortingRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     Optional<List<Product>> findByName(String name);
+
+    List<Product> findAll();
 }
