@@ -7,7 +7,7 @@ import com.ecommerce.shopping.exception.BadRequestException;
 import com.ecommerce.shopping.mapper.ProductMapper;
 import com.ecommerce.shopping.repository.ProductRepository;
 import com.ecommerce.shopping.service.ProductService;
-import com.ecommerce.shopping.service.specification.SearchUtil;
+import com.ecommerce.shopping.specification.SearchUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
