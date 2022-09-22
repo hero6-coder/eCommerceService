@@ -1,4 +1,4 @@
-package com.ecommerce.shopping.service.specification;
+package com.ecommerce.shopping.specification;
 
 import com.ecommerce.shopping.dto.specification.SearchCriteria;
 import org.springframework.data.jpa.domain.Specification;
