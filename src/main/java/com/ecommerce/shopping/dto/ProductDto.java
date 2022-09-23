@@ -1,6 +1,8 @@
 package com.ecommerce.shopping.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
@@ -10,15 +12,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDto {
     @NotNull
     private Long id;
 
     @Length(max = 255)
     @NotEmpty
-    @Pattern(regexp = "^[a-zA-Z0-9_.-]*$")
     private String name;
 
     private String description;

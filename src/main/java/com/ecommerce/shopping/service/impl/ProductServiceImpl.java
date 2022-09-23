@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -35,14 +36,16 @@ public class ProductServiceImpl implements ProductService {
     private Map<Long, ProductDto> productList;
 
     @PostConstruct
-    public void loadProductsAtStartup() {
+    public Map<Long, ProductDto> loadProductsAtStartup() {
         productList = productRepository.findAll()
                 .stream()
                 .filter(product -> !product.isDeleted())
                 .map(productMapper::toDto)
                 .collect(Collectors.toConcurrentMap(ProductDto::getId, productDto -> productDto));
         log.info("totalProduct: {}", productList.size());
+        return productList;
     }
+
     @Override
     public ProductDto getProduct(@NotNull Long id) {
         return Optional.ofNullable(productList.get(id))
@@ -60,10 +63,9 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(@NotNull ProductDto productDto) {
-        Product product = productMapper.toEntity(productDto);
-        checkDuplicateName(product.getId(), product.getName());
-        product = productRepository.save(product);
-        productDto = productMapper.toDto(product);
+        Product newProduct = productMapper.toEntity(productDto);
+        newProduct = productRepository.save(newProduct);
+        productDto = productMapper.toDto(newProduct);
         // Update to product list
         productList.put(productDto.getId(), productDto);
         return productDto;
@@ -72,12 +74,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto updateProduct(@NotNull ProductDto productDto, Long id) {
-        Product product = findProductFromRepository(id);
-        checkDuplicateName(product.getId(), productDto.getName());
-        Product newProduct = productMapper.toEntity(productDto);
-        newProduct.setId(id);
-        newProduct = productRepository.save(newProduct);
-        productDto = productMapper.toDto(newProduct);
+        Product product = productMapper.toEntity(productDto);
+        product.setId(id);
+        product = productRepository.save(product);
+        productDto = productMapper.toDto(product);
         // Update to product list
         productList.put(productDto.getId(), productDto);
         return productDto;
@@ -92,20 +92,23 @@ public class ProductServiceImpl implements ProductService {
         product = productRepository.save(product);
         ProductDto productDto = productMapper.toDto(product);
         // Remove product from product list
-        productList.remove(productDto.getId(), productDto);
+        productList.remove(productDto.getId());
         return productDto;
     }
 
     // Only one thread can access this method at the same time
     @Override
-    public synchronized void persistToDb(Map<Long, ProductDto> userCart) {
-        userCart.keySet().stream().forEach(productId -> {
+    public synchronized List<ProductDto> persistToDb(Map<Long, ProductDto> userCart) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+        userCart.keySet().forEach(productId -> {
             ProductDto userProduct = userCart.get(productId);
             Product product = findProductFromRepository(productId);
             product.setQuantity(product.getQuantity() - userProduct.getQuantity());
             product.setId(productId);
-            productRepository.save(product);
+            product = productRepository.save(product);
+            productDtoList.add(productMapper.toDto(product));
         });
+        return productDtoList;
     }
 
     @Override
@@ -119,15 +122,5 @@ public class ProductServiceImpl implements ProductService {
     private Product findProductFromRepository(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Entity Not Found", "id :" + id));
-    }
-
-    private void checkDuplicateName(Long id, String name) {
-        Optional<List<Product>> list = productRepository.findByName(name);
-        list.flatMap(products -> products
-            .stream()
-            .filter(product -> id.equals(product.getId()))
-            .findAny()).ifPresent(p -> {
-                throw new BadRequestException("entity.duplicate.name", "name :" + name);
-            });
     }
 }

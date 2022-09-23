@@ -1,10 +1,8 @@
 package com.ecommerce.shopping.service.impl;
 
 import com.ecommerce.shopping.dto.ProductDto;
-import com.ecommerce.shopping.entity.Product;
 import com.ecommerce.shopping.exception.BadRequestException;
 import com.ecommerce.shopping.exception.NotEnoughProductsInStockException;
-import com.ecommerce.shopping.repository.ProductRepository;
 import com.ecommerce.shopping.service.OrderService;
 import com.ecommerce.shopping.service.ProductService;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +55,7 @@ public class OrderServiceImpl implements OrderService {
                     checkRemainingProduct(quantity, productDto);
                     productDto.setQuantity(productDto.getQuantity() - quantity);
                     userProduct.setQuantity(quantity);
+                    userCart.put(productId, userProduct);
                 }
             }
         } else {

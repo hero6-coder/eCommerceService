@@ -18,10 +18,10 @@ VALUES ('Vintage Straight High Jeans', 'Vintage Straight High Jeans', 20, 49.75,
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
 VALUES ('Halterneck bodycon dress', 'Halterneck bodycon dress', 15, 40.95, 1, 2, 3, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
-VALUES ('Slip dress', 'Slip dress', 5, 60.95, 1, 2, 3, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
+VALUES ('Slip dress', 'Slip dress', 5, 60.95, 1, 2, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
 VALUES ('Satin wrap dress', 'Satin wrap dress', 25, 60.15, 1, 1, 1, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
 VALUES ('Patterned shirt dress', 'Patterned shirt dress', 12, 38.15, 1, 1, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
 INSERT INTO PRODUCT (name, description, quantity, price, category_id, brand_id, color_id, is_deleted, created_at, updated_at)
-VALUES ('Oversized shirt dress', 'Oversized shirt dress', 6, 34.15, 1, 2, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
+VALUES ('Oversized shirt dress', 'Oversized shirt dress', 6, 34.15, 3, 2, 2, false, CURRENT_TIMESTAMP (), CURRENT_TIMESTAMP ());
