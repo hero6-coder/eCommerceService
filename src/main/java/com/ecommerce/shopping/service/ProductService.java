@@ -23,5 +23,5 @@ public interface ProductService {
 
     ProductDto delete(@NotNull Long id);
 
-    void persistToDb(Map<Long, ProductDto> userCart);
+    List<ProductDto> persistToDb(Map<Long, ProductDto> userCart);
 }

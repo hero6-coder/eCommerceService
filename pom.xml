@@ -15,6 +15,23 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
+		<!-- Jacoco-->
+		<jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+		<!-- sonar -->
+		<sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
+		<sonar.projectKey>nab-ecommerce-service</sonar.projectKey>
+		<sonar.organization>nab</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<unit.tests.skip>false</unit.tests.skip>
+		<sonar.exclusions>
+			**/config/**,
+			**/exception/**,
+			**/config/**,
+			**/entity/**,
+			**/dto/**,
+			**/specification/**,
+			**/client/stub/**
+		</sonar.exclusions>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -111,6 +128,33 @@
 						</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>junit-test</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+						<configuration>
+							<dataFile>target/jacoco.exec</dataFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>${sonar-maven-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
