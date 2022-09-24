@@ -52,4 +52,10 @@ public class OrderController {
         log.info("OrderController#getTotalMoneyForCart --- userId: {}", userId);
         return orderService.getTotal(userId);
     }
+
+    @PostMapping("/{userId}/clearSession")
+    public void clearUserSession(@PathVariable("userId") Long userId) {
+        log.info("OrderController#clearUserSession --- userId: {}", userId);
+        orderService.clearUserSession(userId);
+    }
 }

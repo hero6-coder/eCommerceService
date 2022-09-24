@@ -16,4 +16,6 @@ public interface OrderService {
     void checkout(Long userId);
 
     BigDecimal getTotal(Long userId);
+
+    void clearUserSession(Long userId);
 }
