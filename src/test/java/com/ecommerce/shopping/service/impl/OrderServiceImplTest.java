@@ -258,4 +258,47 @@ class OrderServiceImplTest {
         BigDecimal total = orderService.getTotal(USER_ID_1);
         Assertions.assertEquals(BigDecimal.ZERO, total);
     }
+
+    @Test
+    void clearUserSession() {
+        // Given: Init product with quantity: 20 items
+        ProductDto productDto = ProductDto.builder()
+                .id(PRODUCT_ID_1)
+                .quantity(20L)
+                .price(10000f)
+                .build();
+        // When
+        when(productService.getProduct(PRODUCT_ID_1)).thenReturn(productDto);
+        // Product 2:
+        ProductDto productDto2 = ProductDto.builder()
+                .id(PRODUCT_ID_2)
+                .quantity(10L)
+                .price(20000f)
+                .build();
+        // When
+        when(productService.getProduct(PRODUCT_ID_2)).thenReturn(productDto2);
+        // User 2 add 2 items of product 1 to cart
+        productDto = orderService.addToCart(USER_ID_2, PRODUCT_ID_1, 2L);
+        // Remaining items of product 1 is 18
+        Assertions.assertEquals(18L, productDto.getQuantity());
+        // User 2 continue to add 5 items of product 2 to cart
+        productDto = orderService.addToCart(USER_ID_2, PRODUCT_ID_2, 5L);
+        // Remaining items of product 2 is 5
+        Assertions.assertEquals(5L, productDto.getQuantity());
+        // Get total of payment
+        BigDecimal total = orderService.getTotal(USER_ID_2);
+        Assertions.assertEquals(BigDecimal.valueOf(120000.0), total);
+        orderService.clearUserSession(USER_ID_2);
+        // After checkout, no item into cart
+        Assertions.assertEquals(0, orderService.getProductsInCart(USER_ID_2).size());
+        // User 2 add 2 items of product 1 to cart (currently the items back to 20
+        productDto = orderService.addToCart(USER_ID_2, PRODUCT_ID_1, 5L);
+        Assertions.assertEquals(15L, productDto.getQuantity());
+    }
+
+    @Test
+    void clearUserSession_NoUserCart() {
+        assertThrows(BadRequestException.class,
+                () -> orderService.clearUserSession(USER_ID_1));
+    }
 }

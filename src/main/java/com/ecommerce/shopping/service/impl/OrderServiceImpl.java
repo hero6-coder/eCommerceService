@@ -165,4 +165,21 @@ public class OrderServiceImpl implements OrderService {
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.ZERO);
     }
+
+    @Override
+    public void clearUserSession(Long userId) {
+        // If user has not ordered any product yet, only return the empty map
+        if (!userCarts.containsKey(userId)) {
+            throw new BadRequestException(
+                    String.format("Not existing cart from user [%d]", userId), null);
+        }
+        synchronized (this) {
+            Map<Long, ProductDto> userCart = userCarts.get(userId);
+            for (var entry : userCart.entrySet()) {
+                ProductDto productDto = getProduct(entry.getKey());
+                productDto.setQuantity(productDto.getQuantity() + entry.getValue().getQuantity());
+            }
+            userCarts.remove(userId);
+        }
+    }
 }

@@ -39,6 +39,7 @@ class OrderControllerTest {
     private static final String checkoutApiPath = "/orders/{userId}/checkout";
     private static final String cartProductsApiPath = "/orders/{userId}/cartProducts";
     private static final String getTotalApiPath = "/orders/{userId}/getTotal";
+    private static final String clearUserSessionApiPath = "/orders/{userId}/clearSession";
 
     @Test
     void addProductToCart() throws Exception {
@@ -214,6 +215,34 @@ class OrderControllerTest {
         // WHEN
         this.mockMvc
                 .perform(get(url).contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION, "Bearer mock_authorization_header"))
+                // THEN
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void clearUserSession() throws Exception {
+        // GIVEN
+        String url = clearUserSessionApiPath.replace("{userId}", "10");
+
+        // WHEN
+        doNothing().when(orderService).clearUserSession(10L);
+
+        this.mockMvc
+                .perform(post(url).contentType(MediaType.APPLICATION_JSON)
+                        .header(AUTHORIZATION, "Bearer mock_authorization_header"))
+                // THEN
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void clearUserSession_Wrong_Path() throws Exception {
+        // GIVEN
+        String url = clearUserSessionApiPath.replace("{userId}", "10/test2");
+
+        // WHEN
+        this.mockMvc
+                .perform(post(url).contentType(MediaType.APPLICATION_JSON)
                         .header(AUTHORIZATION, "Bearer mock_authorization_header"))
                 // THEN
                 .andExpect(status().isNotFound());
