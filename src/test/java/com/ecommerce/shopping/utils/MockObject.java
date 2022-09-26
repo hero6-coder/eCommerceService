@@ -22,76 +22,21 @@ public class MockObject {
         Color color_2 = new Color(2l, "Blue", false);
         Color color_3 = new Color(3l, "Pink", false);
         // Product
-        Product product_1 = Product.builder()
-                .id(1l)
-                .name("Skinny High Ankle Jeans")
-                .quantity(10L)
-                .price(35.75f)
-                .category(category_3)
-                .brand(brand_1)
-                .color(color_2)
-                .isDeleted(false)
-                .build();
-        Product product_2 = Product.builder()
-                .id(2l)
-                .name("Vintage Straight High Jeans")
-                .quantity(20L)
-                .price(49.75f)
-                .category(category_1)
-                .brand(brand_2)
-                .color(color_3)
-                .isDeleted(false)
-                .build();
-        Product product_3 = Product.builder()
-                .id(3l)
-                .name("Halterneck bodycon dress")
-                .quantity(15L)
-                .price(40.95f)
-                .category(category_1)
-                .brand(brand_2)
-                .color(color_3)
-                .isDeleted(false)
-                .build();
-        Product product_4 = Product.builder()
-                .id(4l)
-                .name("Slip dress")
-                .quantity(5L)
-                .price(60.95f)
-                .category(category_1)
-                .brand(brand_2)
-                .color(color_2)
-                .isDeleted(false)
-                .build();
-        Product product_5 = Product.builder()
-                .id(5l)
-                .name("Satin wrap dress")
-                .quantity(25L)
-                .price(60.15f)
-                .category(category_1)
-                .brand(brand_1)
-                .color(color_1)
-                .isDeleted(false)
-                .build();
-        Product product_6 = Product.builder()
-                .id(6l)
-                .name("Patterned shirt dress")
-                .quantity(12L)
-                .price(38.15f)
-                .category(category_1)
-                .brand(brand_1)
-                .color(color_2)
-                .isDeleted(false)
-                .build();
-        Product product_7 = Product.builder()
-                .id(7l)
-                .name("Oversized shirt dress")
-                .quantity(6L)
-                .price(34.15f)
-                .category(category_3)
-                .brand(brand_1)
-                .color(color_2)
-                .isDeleted(false)
-                .build();
+        Product product_1 = new Product(1L, "Skinny High Ankle Jeans", null,
+                10L, 35.75f, category_3, brand_1, color_2, null, false);
+        Product product_2 = new Product(2L, "Vintage Straight High Jeans", null,
+                20L, 49.75f, category_1, brand_2, color_3, null, false);
+        Product product_3 = new Product(3L, "Halterneck bodycon dress", null,
+                15L, 40.95f, category_1, brand_2, color_3, null, false);
+        Product product_4 = new Product(4L, "Slip dress", null,
+                5L, 60.95f, category_1, brand_2, color_2, null, false);
+        Product product_5 = new Product(5L, "Satin wrap dress", null,
+                25L, 60.15f, category_1, brand_1, color_1, null, false);
+        Product product_6 = new Product(6L, "Patterned shirt dress", null,
+                12L, 38.15f, category_1, brand_1, color_2, null, false);
+        Product product_7 = new Product(7L, "Oversized shirt dress", null,
+                6L, 34.15f, category_3, brand_1, color_2, null, false);
+
         List<Product> products = List.of(product_1,
                 product_2,
                 product_3,

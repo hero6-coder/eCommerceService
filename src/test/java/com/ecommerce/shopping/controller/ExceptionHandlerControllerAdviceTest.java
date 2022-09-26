@@ -1,9 +1,6 @@
 package com.ecommerce.shopping.controller;
 
-import com.ecommerce.shopping.exception.BadRequestException;
-import com.ecommerce.shopping.exception.ErrorResponse;
-import com.ecommerce.shopping.exception.NotEnoughProductsInStockException;
-import com.ecommerce.shopping.exception.StatusCode;
+import com.ecommerce.shopping.exception.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,5 +29,14 @@ class ExceptionHandlerControllerAdviceTest {
 
     // THEN
     Assertions.assertEquals(StatusCode.NOT_ENOUGH_QUANTITY, actual.getStatusCode());
+  }
+
+  @Test
+  void handleDataIntegrityExceptionException() {
+    ErrorResponse actual = exceptionHandler.handleDataIntegrityExceptionException(
+            new DataIntegrityException("msg"));
+
+    // THEN
+    Assertions.assertEquals(StatusCode.DATA_INTEGRITY_VIOLATION, actual.getStatusCode());
   }
 }

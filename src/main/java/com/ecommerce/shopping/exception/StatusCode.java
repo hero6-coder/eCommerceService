@@ -6,7 +6,8 @@ public enum StatusCode {
     ENTITY_EXISTED(3),
     USER_NAME_OR_PASSWORD_INCORRECT(4),
     UNAUTHORIZED(5),
-    NOT_ENOUGH_QUANTITY(6);
+    NOT_ENOUGH_QUANTITY(6),
+    DATA_INTEGRITY_VIOLATION(7);
     private int value;
 
     StatusCode(int value) {
