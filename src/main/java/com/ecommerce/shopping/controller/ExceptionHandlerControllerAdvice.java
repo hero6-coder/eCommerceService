@@ -1,9 +1,6 @@
 package com.ecommerce.shopping.controller;
 
-import com.ecommerce.shopping.exception.BadRequestException;
-import com.ecommerce.shopping.exception.ErrorResponse;
-import com.ecommerce.shopping.exception.NotEnoughProductsInStockException;
-import com.ecommerce.shopping.exception.StatusCode;
+import com.ecommerce.shopping.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -31,6 +28,13 @@ public class ExceptionHandlerControllerAdvice extends ResponseEntityExceptionHan
   protected ErrorResponse handleNotEnoughProductsInStockException (NotEnoughProductsInStockException ex) {
     log.error("Error", ex);
     return new ErrorResponse(StatusCode.NOT_ENOUGH_QUANTITY, ex.getMessage(), null);
+  }
+
+  @ExceptionHandler(DataIntegrityException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  protected ErrorResponse handleDataIntegrityExceptionException (DataIntegrityException ex) {
+    log.error("Error", ex);
+    return new ErrorResponse(StatusCode.DATA_INTEGRITY_VIOLATION, ex.getMessage(), null);
   }
 
 }

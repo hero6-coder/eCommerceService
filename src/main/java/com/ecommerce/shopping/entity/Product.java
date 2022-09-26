@@ -1,7 +1,6 @@
 package com.ecommerce.shopping.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,11 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product")
+@Table(uniqueConstraints = {@UniqueConstraint(name = "UniqueProduct", columnNames = { "name", "category_id", "brand_id", "color_id", "is_deleted" })})
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +31,15 @@ public class Product extends BaseEntity {
     private Float price;
 
     @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @ManyToOne
+    @JoinColumn(name = "brand_id", referencedColumnName = "id")
     private Brand brand;
 
     @ManyToOne
+    @JoinColumn(name = "color_id", referencedColumnName = "id")
     private Color color;
 
     @Column

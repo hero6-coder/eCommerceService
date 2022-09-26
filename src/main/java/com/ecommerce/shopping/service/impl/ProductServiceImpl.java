@@ -4,6 +4,7 @@ import com.ecommerce.shopping.dto.ProductDto;
 import com.ecommerce.shopping.dto.specification.SearchCriteria;
 import com.ecommerce.shopping.entity.Product;
 import com.ecommerce.shopping.exception.BadRequestException;
+import com.ecommerce.shopping.exception.DataIntegrityException;
 import com.ecommerce.shopping.mapper.ProductMapper;
 import com.ecommerce.shopping.repository.ProductRepository;
 import com.ecommerce.shopping.service.ProductService;
@@ -63,52 +64,70 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductDto createProduct(@NotNull ProductDto productDto) {
-        Product newProduct = productMapper.toEntity(productDto);
-        newProduct = productRepository.save(newProduct);
-        productDto = productMapper.toDto(newProduct);
-        // Update to product list
-        productList.put(productDto.getId(), productDto);
-        return productDto;
+        try {
+            Product newProduct = productMapper.toEntity(productDto);
+            newProduct.setId(null);
+            newProduct = productRepository.save(newProduct);
+            productDto = productMapper.toDto(newProduct);
+            // Update to product list
+            productList.put(productDto.getId(), productDto);
+            return productDto;
+        } catch (Exception e) {
+            throw new DataIntegrityException("Unique constraint violate");
+        }
+
     }
 
     @Override
     @Transactional
     public ProductDto updateProduct(@NotNull ProductDto productDto, Long id) {
-        Product product = productMapper.toEntity(productDto);
-        product.setId(id);
-        product = productRepository.save(product);
-        productDto = productMapper.toDto(product);
-        // Update to product list
-        productList.put(productDto.getId(), productDto);
-        return productDto;
+        try {
+            Product product = productMapper.toEntity(productDto);
+            product.setId(id);
+            product = productRepository.saveAndFlush(product);
+            productDto = productMapper.toDto(product);
+            // Update to product list
+            productList.put(productDto.getId(), productDto);
+            return productDto;
+        } catch (Exception e) {
+            throw new DataIntegrityException("Unique constraint violate");
+        }
     }
 
     @Override
     @Transactional
     public ProductDto delete(Long id) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Entity Not Found", "id :" + id));
-        product.setDeleted(true);
-        product = productRepository.save(product);
-        ProductDto productDto = productMapper.toDto(product);
-        // Remove product from product list
-        productList.remove(productDto.getId());
-        return productDto;
+        try {
+            Product product = productRepository.findById(id)
+                    .orElseThrow(() -> new BadRequestException("Entity Not Found", "id :" + id));
+            product.setDeleted(true);
+            product = productRepository.save(product);
+            ProductDto productDto = productMapper.toDto(product);
+            // Remove product from product list
+            productList.remove(productDto.getId());
+            return productDto;
+        } catch (Exception e) {
+            throw new DataIntegrityException("Unique constraint violate");
+        }
     }
 
     // Only one thread can access this method at the same time
     @Override
     public synchronized List<ProductDto> persistToDb(Map<Long, ProductDto> userCart) {
-        List<ProductDto> productDtoList = new ArrayList<>();
-        userCart.keySet().forEach(productId -> {
-            ProductDto userProduct = userCart.get(productId);
-            Product product = findProductFromRepository(productId);
-            product.setQuantity(product.getQuantity() - userProduct.getQuantity());
-            product.setId(productId);
-            product = productRepository.save(product);
-            productDtoList.add(productMapper.toDto(product));
-        });
-        return productDtoList;
+        try {
+            List<ProductDto> productDtoList = new ArrayList<>();
+            userCart.keySet().forEach(productId -> {
+                ProductDto userProduct = userCart.get(productId);
+                Product product = findProductFromRepository(productId);
+                product.setQuantity(product.getQuantity() - userProduct.getQuantity());
+                product.setId(productId);
+                product = productRepository.save(product);
+                productDtoList.add(productMapper.toDto(product));
+            });
+            return productDtoList;
+        } catch (Exception e) {
+            throw new DataIntegrityException("Unique constraint violate");
+        }
     }
 
     @Override
